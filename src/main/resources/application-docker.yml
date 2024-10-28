@@ -1,0 +1,81 @@
+# Configuración de gestión para la aplicación
+management:
+  info:
+    env:
+      enabled: true # Permite la exposición de información del entorno de ejecución.
+  
+  endpoint:
+    health:
+      show-details: always # Siempre muestra detalles completos en el endpoint de salud.
+  
+  endpoints:
+    web:
+      base-path: / # Define la ruta base para los endpoints de gestión.
+      exposure:
+        include: "*" # Expone todos los endpoints de gestión (info, health, etc.).
+
+# Configuración del servidor
+server:
+  port: 8080 # Puerto donde el servidor escuchará las solicitudes.
+  
+  compression:
+    enabled: true # Habilita la compresión de respuestas para mejorar el rendimiento.
+    min-response-size: 2048 # Tamaño mínimo de respuesta para ser comprimido.
+    mime-types: application/json,application/xml,text/html,text/plain # Tipos MIME que se comprimirán.
+
+  servlet:
+    context-path: /api # Establece el contexto base para la API, todas las rutas estarán bajo /api.
+
+# Información sobre la aplicación
+info:
+  application:
+    groupId: '@project.groupId@' # ID del grupo del proyecto, se reemplaza en la construcción.
+    artifactId: '@project.artifactId@' # ID del artefacto del proyecto.
+    version: '@project.version@' # Versión del proyecto, también se reemplaza al construir.
+
+# Configuración del conector HTTP para otros servicios
+http-connector:
+  hosts:
+    api-catalog: # Nombre del servicio para obtener información de la ciudad.
+      host: api-catalog # Nombre del host donde se encuentra el servicio catalog.
+      port: 6070 # Puerto en el que escucha el servicio catalog.
+      endpoints:
+        get-city: # Configuración para el endpoint que obtiene la ciudad.
+          url: "/api/flights/catalog/city/{code}" # URL del endpoint para obtener información de la ciudad.
+          readTimeout: 10000 # Tiempo máximo para leer la respuesta del servicio (en ms).
+          writeTimeout: 10000 # Tiempo máximo para escribir la solicitud (en ms).
+          connectionTimeout: 20000 # Tiempo máximo para establecer la conexión (en ms).
+
+# Configuración de Resilience4j para manejar fallos y limitación de tasas
+resilience4j:
+  circuitbreaker: # Configuración para el Circuit Breaker.
+    configs:
+      default: # Configuración predeterminada del Circuit Breaker.
+        failure-rate-threshold: 50 # Umbral de tasa de fallos en porcentaje.
+        sliding-window-type: count_based # Tipo de ventana deslizante basada en conteo.
+        sliding-window-size: 5 # Número de solicitudes a considerar para el conteo de fallos.
+
+        automatic-transition-from-open-to-half-open-enabled: true # Habilita transición automática del estado abierto a medio abierto.
+        wait-duration-in-open-state: 10s # Tiempo de espera en estado abierto antes de probar de nuevo.
+        permitted-number-of-calls-in-half-open-state: 1 # Número de llamadas permitidas en estado medio abierto.
+
+        register-health-indicator: false # No registra un indicador de salud para el Circuit Breaker.
+        record-exceptions: # Excepciones que se registrarán para el Circuit Breaker.
+          - io.netty.handler.timeout.ReadTimeoutException # Excepción de tiempo de espera de lectura.
+          - java.lang.RuntimeException # Excepción general.
+          - java.lang.Exception # Cualquier excepción.
+
+    instances:
+      api-catalog: # Configuración específica para el servicio api-catalog.
+        base-config: default # Usa la configuración predeterminada del Circuit Breaker.
+
+  ratelimiter: # Configuración para el limitador de tasa.
+    configs:
+      default: # Configuración predeterminada del limitador de tasa.
+        limit-for-period: 2 # Límite de solicitudes permitidas por periodo.
+        limit-refresh-period: 3s # Periodo de tiempo para refrescar el límite.
+        timeout-duration: 1s # Tiempo de espera si se excede el límite.
+
+    instances:
+      post-reservation: # Configuración específica para el endpoint de creación de reservas.
+        base-config: default # Usa la configuración predeterminada del limitador de tasa.

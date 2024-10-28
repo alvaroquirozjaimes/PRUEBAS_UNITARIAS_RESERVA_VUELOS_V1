@@ -1,0 +1,26 @@
+<configuration> <!-- Inicio de la configuración de Logback -->
+
+    <!-- Definición de un appender que envía logs a la consola -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder> <!-- Configuración del formato del log -->
+            <!-- Define el patrón de salida del log -->
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <!-- %d{HH:mm:ss.SSS}: Muestra la fecha y hora con milisegundos -->
+            <!-- [%thread]: Muestra el nombre del hilo en ejecución -->
+            <!-- %-5level: Muestra el nivel de log (DEBUG, INFO, etc.), alineado a la izquierda en un espacio de 5 caracteres -->
+            <!-- %logger{36}: Muestra el nombre del logger, truncado a 36 caracteres -->
+            <!-- %msg: Muestra el mensaje del log -->
+            <!-- %n: Nueva línea -->
+        </encoder>
+    </appender>
+
+    <!-- Configuración específica para los logs de la clase ORG.Reservations -->
+    <logger name="org.Reservations" level="debug"/>
+    <!-- Esto establece el nivel de logging para esta clase en DEBUG, lo que significa que se registrarán los mensajes de nivel DEBUG y superior (DEBUG, INFO, WARN, ERROR) -->
+
+    <!-- Configuración del logger raíz -->
+    <root level="info">
+        <!-- Establece el nivel mínimo de logging para el logger raíz en INFO, lo que significa que solo se registrarán mensajes de nivel INFO y superior -->
+        <appender-ref ref="STDOUT" /> <!-- Referencia al appender STDOUT para que los mensajes se envíen a la consola -->
+    </root>
+</configuration> <!-- Fin de la configuración de Logback -->

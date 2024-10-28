@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Definición del proyecto Maven con configuración básica -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Especificación del parent POM de Spring Boot -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.3</version>
+        <relativePath/> <!-- Se busca el parent en el repositorio -->
+    </parent>
+
+    <!-- Información del proyecto -->
+    <groupId>com.edteam</groupId>
+    <artifactId>api-reservations</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>api-reservations</name>
+    <description>api-reservations</description>
+
+    <!-- Propiedades del proyecto -->
+    <properties>
+        <java.version>17</java.version> <!-- Versión de Java -->
+        <mapstruct.version>1.5.5.Final</mapstruct.version> <!-- Versión de MapStruct -->
+        <springdoc-openapi-starter-webmvc-ui.version>2.1.0</springdoc-openapi-starter-webmvc-ui.version> <!-- Versión de SpringDoc -->
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version> <!-- Versión del plugin de compilación -->
+        <junit.version>5.10.1</junit.version> <!-- Versión de JUnit -->
+        <hamcrest-all.version>1.3</hamcrest-all.version> <!-- Versión de Hamcrest -->
+        <mockito.version>5.4.0</mockito.version> <!-- Versión de Mockito -->
+        <old-junit.version>4.13.2</old-junit.version> <!-- Versión antigua de JUnit -->
+        <quickperf.version>1.1.0</quickperf.version> <!-- Versión de QuickPerf -->
+        <junit-platform-launcher.version>1.8.2</junit-platform-launcher.version> <!-- Versión de JUnit Platform Launcher -->
+        <pitest-maven.version>1.15.6</pitest-maven.version> <!-- Versión del plugin de Pitest -->
+        <pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version> <!-- Versión del plugin de Pitest para JUnit5 -->
+        <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version> <!-- Versión del plugin Failsafe -->
+        <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version> <!-- Versión del plugin Enforcer -->
+        <formatter-maven-plugin.version>2.23.0</formatter-maven-plugin.version> <!-- Versión del plugin de formateo -->
+        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version> <!-- Versión del plugin Surefire -->
+        <jacoco.version>0.8.10</jacoco.version> <!-- Versión de JaCoCo para la cobertura de pruebas -->
+        <sonar.organization>adschosen-github</sonar.organization> <!-- Organización de SonarCloud -->
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url> <!-- URL del host de SonarCloud -->
+    </properties>
+
+    <dependencies>
+        <!-- Dependencia de Spring Boot para crear aplicaciones web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Procesador de configuración de Spring Boot (opcional) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional> <!-- Indica que esta dependencia es opcional -->
+        </dependency>
+
+        <!-- Dependencia de pruebas de Spring Boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope> <!-- Solo se utiliza en el ámbito de pruebas -->
+        </dependency>
+
+        <!-- Actuadores de Spring Boot para métricas y monitoreo -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Dependencia para validación -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Dependencia de MapStruct para la mapeo de objetos -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version> <!-- Usa la versión definida en propiedades -->
+        </dependency>
+
+        <!-- Starter para programación reactiva con Spring WebFlux -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <!-- Starter para programación orientada a aspectos con Spring AOP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- Dependencia para SpringDoc, que genera documentación OpenAPI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi-starter-webmvc-ui.version}</version> <!-- Usa la versión definida en propiedades -->
+        </dependency>
+
+        <!-- Starter de logging para Spring Boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+
+        <!-- Dependencias para pruebas con JUnit y otras bibliotecas -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version> <!-- Usa la versión definida en propiedades -->
+            <scope>test</scope> <!-- Solo se utiliza en el ámbito de pruebas -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>${hamcrest-all.version}</version> <!-- Usa la versión definida en propiedades -->
+            <scope>test</scope> <!-- Solo se utiliza en el ámbito de pruebas -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version> <!-- Usa la versión definida en propiedades -->
+            <scope>test</scope> <!-- Solo se utiliza en el ámbito de pruebas -->
+        </dependency>
+
+        <!-- Dependencia para el motor Vintage de JUnit -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit.version}</version> <!-- Usa la versión definida en propiedades -->
+            <scope>test</scope> <!-- Solo se utiliza en el ámbito de pruebas -->
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId> <!-- Excluye JUnit de esta dependencia -->
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${old-junit.version}</version> <!-- Usa la versión antigua de JUnit -->
+            <scope>test</scope> <!-- Solo se utiliza en el ámbito de pruebas -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.quickperf</groupId>
+            <artifactId>quick-perf-junit5</artifactId>
+            <version>${quickperf.version}</version> <!-- Usa la versión definida en propiedades -->
+            <scope>test</scope> <!-- Solo se utiliza en el ámbito de pruebas -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${junit-platform-launcher.version}</version> <!-- Usa la versión definida en propiedades -->
+            <scope>test</scope> <!-- Solo se utiliza en el ámbito de pruebas -->
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Plugin para formatear el código -->
+            <plugin>
+                <groupId>net.revelc.code.formatter</groupId>
+                <artifactId>formatter-maven-plugin</artifactId>
+                <version>${formatter-maven-plugin.version}</version>
+                <configuration>
+                    <encoding>UTF-8</encoding> <!-- Codificación de archivos -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>format</goal> <!-- Objetivo de formateo -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Plugin de Spring Boot para empaquetar el proyecto -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- Plugin para la compilación de Java -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version> <!-- Usa la versión definida en propiedades -->
+                <configuration>
+                    <source>${java.version}</source> <!-- Versión fuente de Java -->
+                    <target>${java.version}</target> <!-- Versión objetivo de Java -->
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version> <!-- Procesador de anotaciones para MapStruct -->
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin para forzar reglas de versión y convergencia de dependencias -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id> <!-- Identificador de la ejecución -->
+                        <goals>
+                            <goal>enforce</goal> <!-- Objetivo de aplicar las reglas -->
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <dependencyConvergence /> <!-- Regla para convergencia de dependencias -->
+                                <requireJavaVersion>
+                                    <version>${java.version}</version> <!-- Regla para requerir una versión específica de Java -->
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Plugin para ejecutar pruebas -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <groups>${activeGroups}</groups> <!-- Configura grupos de pruebas para ejecutar -->
+                </configuration>
+            </plugin>
+
+            <!-- Plugin para la cobertura de pruebas con JaCoCo -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id> <!-- Preparar el agente JaCoCo -->
+                        <goals>
+                            <goal>prepare-agent</goal> <!-- Objetivo de preparar el agente -->
+                        </goals>
+                        <phase>test-compile</phase> <!-- Fase de compilación de pruebas -->
+                    </execution>
+                    <execution>
+                        <id>report</id> <!-- Generar informe de cobertura -->
+                        <goals>
+                            <goal>report</goal> <!-- Objetivo de generar el informe -->
+                        </goals>
+                        <phase>test</phase> <!-- Fase de pruebas -->
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Plugin para pruebas de integración -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version> <!-- Usa la versión definida en propiedades -->
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- Perfiles para configuraciones opcionales -->
+    <profiles>
+        <profile>
+            <id>pitest</id> <!-- Identificador del perfil Pitest -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <version>${pitest-maven.version}</version> <!-- Usa la versión definida en propiedades -->
+                        <configuration>
+                            <threads>4</threads> <!-- Número de hilos para ejecución -->
+                            <timestampedReports>false</timestampedReports> <!-- Desactiva informes con timestamp -->
+                            <outputFormats>
+                                <outputFormat>HTML</outputFormat> <!-- Formato de salida HTML -->
+                                <outputFormat>XML</outputFormat> <!-- Formato de salida XML -->
+                            </outputFormats>
+                            <targetClasses>
+                                <param>com.edteam.reservations.repository.*</param> <!-- Clases objetivo en el paquete repository -->
+                                <param>com.edteam.reservations.service.*</param> <!-- Clases objetivo en el paquete service -->
+                            </targetClasses>
+                            <targetTests>
+                                <param>repository.com.ReservationsTest.ReservationRepositoryTest</param> <!-- Pruebas objetivo -->
+                                <param>com.edteam.reservations.service.*</param> <!-- Pruebas en el paquete service -->
+                            </targetTests>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.pitest</groupId>
+                                <artifactId>pitest-junit5-plugin</artifactId>
+                                <version>${pitest-junit5-plugin.version}</version> <!-- Plugin para JUnit5 -->
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>pitest</id> <!-- Identificador de la ejecución de Pitest -->
+                                <phase>test</phase> <!-- Fase de pruebas -->
+                                <goals>
+                                    <goal>mutationCoverage</goal> <!-- Objetivo de cobertura de mutaciones -->
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

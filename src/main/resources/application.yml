@@ -1,0 +1,70 @@
+management:
+  info:
+    env:
+      enabled: true # Habilita la exposición de la información del entorno.
+  endpoint:
+    health:
+      show-details: always # Muestra detalles completos en el endpoint de salud (health check).
+
+  endpoints:
+    web:
+      base-path: / # Define la ruta base para los endpoints de gestión.
+      exposure:
+        include: "*" # Expone todos los endpoints de gestión.
+
+server:
+  port: 8080 # Define el puerto en el que el servidor escuchará las solicitudes.
+  compression:
+    enabled: true # Habilita la compresión de respuestas.
+    min-response-size: 2048 # Establece el tamaño mínimo de respuesta para la compresión.
+    mime-types: application/json,application/xml,text/html,text/plain # Tipos MIME que se pueden comprimir.
+
+  servlet:
+    context-path: /api # Define el contexto de la aplicación (ruta base de la API).
+
+info:
+  application:
+    groupId: '@project.groupId@' # ID del grupo del proyecto, se sustituirá al construir.
+    artifactId: '@project.artifactId@' # ID del artefacto del proyecto, se sustituirá al construir.
+    version: '@project.version@' # Versión del proyecto, se sustituirá al construir.
+
+http-connector:
+  hosts:
+    api-catalog: # Configuración para el conector HTTP.
+      host: localhost # Host para el conector.
+      port: 6070 # Puerto en el que se ejecuta el servicio de catálogo.
+      endpoints:
+        get-city: # Configuración para el endpoint "get-city".
+          url: "/api/flights/catalog/city/{code}" # URL del endpoint.
+          readTimeout: 1000 # Tiempo de espera para leer (en milisegundos).
+          writeTimeout: 1000 # Tiempo de espera para escribir (en milisegundos).
+          connectionTimeout: 2000 # Tiempo de espera para la conexión (en milisegundos).
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default: # Configuración predeterminada para circuit breakers.
+        failure-rate-threshold: 50 # Umbral de tasa de fallos en porcentaje para abrir el circuito.
+        sliding-window-type: count_based # Tipo de ventana deslizante (por conteo).
+        sliding-window-size: 5 # Tamaño de la ventana deslizante.
+        automatic-transition-from-open-to-half-open-enabled: true # Habilita la transición automática de abierto a medio abierto.
+        wait-duration-in-open-state: 10s # Tiempo que espera en estado abierto antes de probar nuevamente.
+        permitted-number-of-calls-in-half-open-state: 1 # Número permitido de llamadas en estado medio abierto.
+        register-health-indicator: false # No registrar el indicador de salud del circuit breaker.
+        record-exceptions: # Excepciones que se registrarán.
+          - io.netty.handler.timeout.ReadTimeoutException
+          - java.lang.RuntimeException
+          - java.lang.Exception
+    instances:
+      api-catalog: # Configuraciones específicas para el "api-catalog".
+        base-config: default # Usa la configuración predeterminada.
+
+  ratelimiter: # Configuración para el limitador de tasa.
+    configs:
+      default:
+        limit-for-period: 2 # Límites para el periodo.
+        limit-refresh-period: 3s # Período de refresco para el limitador.
+        timeout-duration: 1s # Tiempo de espera si se excede el límite.
+    instances:
+      post-reservation: # Configuraciones específicas para el limitador de tasa del endpoint "post-reservation".
+        base-config: default # Usa la configuración predeterminada.
